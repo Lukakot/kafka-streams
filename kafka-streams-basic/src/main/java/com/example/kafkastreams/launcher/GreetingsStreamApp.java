@@ -22,7 +22,7 @@ public class GreetingsStreamApp {
         properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
 
 
-        createTopics(properties, List.of(GreetingTopology.GREETINGS, GreetingTopology.GREETINGS_UPPERCASE));
+        createTopics(properties, List.of(GreetingTopology.GREETINGS, GreetingTopology.GREETINGS_SPANISH, GreetingTopology.GREETINGS_UPPERCASE));
         var greetingsTopology = GreetingTopology.buildTopology();
         var kafkaStreams = new KafkaStreams(greetingsTopology, properties);
 
