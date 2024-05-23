@@ -1,12 +1,10 @@
 package com.example.kafkastreams.topology;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
-import org.apache.kafka.streams.kstream.Consumed;
+import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Printed;
-import org.apache.kafka.streams.kstream.Produced;
 
 @Slf4j
 public class GreetingTopology {
@@ -23,11 +21,11 @@ public class GreetingTopology {
         StreamsBuilder streamsBuilder = new StreamsBuilder();
 
         // read from GREETINGS topic
-        var greetingsStream = streamsBuilder
-                .stream(GREETINGS, Consumed.with(Serdes.String(), Serdes.String()));
+        KStream<String,String> greetingsStream = streamsBuilder
+                .stream(GREETINGS);
 
-        var greetingsSpanishStream = streamsBuilder
-                .stream(GREETINGS_SPANISH, Consumed.with(Serdes.String(), Serdes.String()));
+        KStream<String,String> greetingsSpanishStream = streamsBuilder
+                .stream(GREETINGS_SPANISH);
 
         var mergedStream = greetingsStream.merge(greetingsSpanishStream);
 
@@ -35,7 +33,7 @@ public class GreetingTopology {
 
         greetingsStream.print(Printed.<String,String>toSysOut().withLabel("greetingsStream"));
         // modifying stream
-        var modifiedStream = mergedStream
+        KStream<String,String> modifiedStream = mergedStream
                 .filter((key,value) -> value.length() > 5)
                 .peek((key, value) -> log.info("After filter key -> {} and value -> {}", key,value))
                 .mapValues((readOnlyKey, value) -> value.toUpperCase());
@@ -44,7 +42,7 @@ public class GreetingTopology {
 
         // writing to GREETINGS_UPPERCASE topic
         modifiedStream
-                .to(GREETINGS_UPPERCASE, Produced.with(Serdes.String(), Serdes.String()));
+                .to(GREETINGS_UPPERCASE);
 
 
         return streamsBuilder.build();
