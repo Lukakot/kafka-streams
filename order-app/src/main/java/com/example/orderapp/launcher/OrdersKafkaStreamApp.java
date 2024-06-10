@@ -34,7 +34,7 @@ public class OrdersKafkaStreamApp {
         //This closes the streams anytime the JVM shuts down normally or abruptly.
         Runtime.getRuntime().addShutdownHook(new Thread(kafkaStreams::close));
         try{
-            //kafkaStreams.start();
+            kafkaStreams.start();
         }catch (Exception e ){
             log.error("Exception in starting the Streams : {}", e.getMessage(), e);
         }
@@ -49,9 +49,7 @@ public class OrdersKafkaStreamApp {
 
         var newTopics = greetings
                 .stream()
-                .map(topic ->{
-                    return new NewTopic(topic, partitions, replication);
-                })
+                .map(topic -> new NewTopic(topic, partitions, replication))
                 .collect(Collectors.toList());
 
         var createTopicResult = admin.createTopics(newTopics);
