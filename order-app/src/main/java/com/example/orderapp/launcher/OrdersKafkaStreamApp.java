@@ -29,30 +29,32 @@ public class OrdersKafkaStreamApp {
         createTopics(config, List.of(OrdersTopology.GENERAL_ORDERS, OrdersTopology.RESTAURANT_ORDERS,OrdersTopology.ORDERS));
 
         //Create an instance of KafkaStreams
-        var kafkaStreams = new KafkaStreams(topology, config);
+        try (var kafkaStreams = new KafkaStreams(topology, config)) {
 
-        //This closes the streams anytime the JVM shuts down normally or abruptly.
-        Runtime.getRuntime().addShutdownHook(new Thread(kafkaStreams::close));
-        try{
-            kafkaStreams.start();
-        }catch (Exception e ){
-            log.error("Exception in starting the Streams : {}", e.getMessage(), e);
+            //This closes the streams anytime the JVM shuts down normally or abruptly.
+            Runtime.getRuntime().addShutdownHook(new Thread(kafkaStreams::close));
+            try {
+                kafkaStreams.start();
+            } catch (Exception e) {
+                log.error("Exception in starting the Streams : {}", e.getMessage(), e);
+            }
         }
-
     }
 
     private static void createTopics(Properties config, List<String> greetings) {
 
-        AdminClient admin = AdminClient.create(config);
-        var partitions = 1;
-        short replication  = 1;
+        org.apache.kafka.clients.admin.CreateTopicsResult createTopicResult;
+        try (AdminClient admin = AdminClient.create(config)) {
+            var partitions = 1;
+            short replication = 1;
 
-        var newTopics = greetings
-                .stream()
-                .map(topic -> new NewTopic(topic, partitions, replication))
-                .collect(Collectors.toList());
+            var newTopics = greetings
+                    .stream()
+                    .map(topic -> new NewTopic(topic, partitions, replication))
+                    .collect(Collectors.toList());
 
-        var createTopicResult = admin.createTopics(newTopics);
+            createTopicResult = admin.createTopics(newTopics);
+        }
         try {
             createTopicResult
                     .all().get();
