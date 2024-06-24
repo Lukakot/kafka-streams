@@ -11,7 +11,7 @@ import java.io.IOException;
 @Slf4j
 public class JsonDeserializer<T> implements Deserializer<T> {
 
-    private final Class<T> destinationClass;
+    private Class<T> destinationClass;
 
     public JsonDeserializer(Class<T> destinationClass) {
         this.destinationClass = destinationClass;
