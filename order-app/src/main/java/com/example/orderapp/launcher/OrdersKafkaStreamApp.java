@@ -1,6 +1,8 @@
 package com.example.orderapp.launcher;
 
 
+import com.example.orderapp.excepionhandler.DeserializationExceptionHandler;
+import com.example.orderapp.excepionhandler.SerializationExceptionHandler;
 import com.example.orderapp.topology.OrdersTopology;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.AdminClient;
@@ -26,6 +28,8 @@ public class OrdersKafkaStreamApp {
         config.put(StreamsConfig.APPLICATION_ID_CONFIG, "orders-app"); // consumer group
         config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest"); // read only the new messages
+        config.put(StreamsConfig.DEFAULT_DESERIALIZATION_EXCEPTION_HANDLER_CLASS_CONFIG, DeserializationExceptionHandler.class);
+        config.put(StreamsConfig.DEFAULT_PRODUCTION_EXCEPTION_HANDLER_CLASS_CONFIG, SerializationExceptionHandler.class);
         createTopics(config, List.of(OrdersTopology.GENERAL_ORDERS, OrdersTopology.RESTAURANT_ORDERS,OrdersTopology.ORDERS));
 
         //Create an instance of KafkaStreams
