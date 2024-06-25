@@ -8,13 +8,18 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="order-app" />
+        <module name="kafka-streams-operations" />
         <module name="kafka-streams-basic" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="kafka-stream-operations" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="kafka-streams-basic" options="-parameters" />
+      <module name="kafka-streams-operations" options="-parameters" />
       <module name="order-app" options="-parameters" />
     </option>
   </component>
