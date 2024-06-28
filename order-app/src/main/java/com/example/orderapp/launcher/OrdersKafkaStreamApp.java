@@ -30,7 +30,7 @@ public class OrdersKafkaStreamApp {
         config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest"); // read only the new messages
         config.put(StreamsConfig.DEFAULT_DESERIALIZATION_EXCEPTION_HANDLER_CLASS_CONFIG, DeserializationExceptionHandler.class);
         config.put(StreamsConfig.DEFAULT_PRODUCTION_EXCEPTION_HANDLER_CLASS_CONFIG, SerializationExceptionHandler.class);
-        createTopics(config, List.of(OrdersTopology.GENERAL_ORDERS, OrdersTopology.RESTAURANT_ORDERS,OrdersTopology.ORDERS));
+        createTopics(config, List.of(OrdersTopology.STORES, OrdersTopology.GENERAL_ORDERS, OrdersTopology.RESTAURANT_ORDERS,OrdersTopology.ORDERS));
 
         //Create an instance of KafkaStreams
         var kafkaStreams = new KafkaStreams(topology, config);
