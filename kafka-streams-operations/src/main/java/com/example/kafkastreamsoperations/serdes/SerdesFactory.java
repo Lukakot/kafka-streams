@@ -18,11 +18,11 @@ public class SerdesFactory {
     }
 
 
-//    public static Serde<Alphabet> alphabet() {
-//
-//        JsonSerializer<Alphabet> jsonSerializer = new JsonSerializer<>();
-//
-//        JsonDeserializer<Alphabet> jsonDeSerializer = new JsonDeserializer<>(Alphabet.class);
-//        return  Serdes.serdeFrom(jsonSerializer, jsonDeSerializer);
-//    }
+    public static Serde<Alphabet> alphabet() {
+
+        JsonSerializer<Alphabet> jsonSerializer = new JsonSerializer<>();
+
+        JsonDeserializer<Alphabet> jsonDeSerializer = new JsonDeserializer<>(Alphabet.class);
+        return  Serdes.serdeFrom(jsonSerializer, jsonDeSerializer);
+    }
 }
